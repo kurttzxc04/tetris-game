@@ -21,12 +21,15 @@
     button{margin-top:12px;padding:8px 10px;border-radius:8px;border:0;background:#1b2430;color:#dfe9ff;cursor:pointer}
     .small{font-size:12px;color:#9fb0d9}
     footer{position:fixed;left:12px;bottom:12px;color:#7f94bb;font-size:12px}
+    .overlay-center{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;pointer-events:none}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="game">
-      <canvas id="tetris" width="240" height="480"></canvas>
+      <div style="position:relative;">
+        <canvas id="tetris" width="240" height="480"></canvas>
+      </div>
       <div class="ui">
         <h1>TETRIS</h1>
         <div class="stat"><span>Score</span><strong id="score">0</strong></div>
@@ -41,6 +44,7 @@
           Rotate: Up or Q / E<br>
           Pause: P — Restart: R
         </div>
+        <button id="btnPause">Pause (P)</button>
         <button id="btnRestart">Restart (R)</button>
       </div>
     </div>
@@ -56,7 +60,6 @@ const canvas = document.getElementById('tetris');
 canvas.width = COLS * BLOCK;
 canvas.height = ROWS * BLOCK;
 const ctx = canvas.getContext('2d');
-ctx.scale(1,1);
 
 // Colors for pieces (index 1..7)
 const COLORS = [null, '#FF6B6B', '#FFD93D', '#6BCB77', '#4D96FF', '#A36BFF', '#FF8AC1', '#00E5FF'];
@@ -101,28 +104,6 @@ function drawCell(x,y,value){
   if(value===0) return;
   ctx.fillStyle = COLORS[value];
   ctx.fillRect(x*BLOCK+1, y*BLOCK+1, BLOCK-2, BLOCK-2);
-  // subtle inner highlight
-  ctx.globalCompositeOperation = 'source-over';
-}
-
-function draw(){
-  // background
-  ctx.fillStyle = '#0b1220';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  // grid
-  for(let y=0;y<ROWS;y++){
-    for(let x=0;x<COLS;x++){
-      const val = arena[y][x];
-      if(val) drawCell(x,y,val);
-      else {
-        // faint grid lines
-        ctx.strokeStyle = 'rgba(255,255,255,0.02)';
-        ctx.strokeRect(x*BLOCK,y*BLOCK,BLOCK,BLOCK);
-      }
-    }
-  }
-  // player piece
-  mergeDraw(player.matrix, player.pos);
 }
 
 function mergeDraw(matrix, offset){
@@ -133,6 +114,43 @@ function mergeDraw(matrix, offset){
       }
     });
   });
+}
+
+function draw(){
+  // background
+  ctx.fillStyle = '#0b1220';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // draw arena
+  for(let y=0;y<ROWS;y++){
+    for(let x=0;x<COLS;x++){
+      const val = arena[y][x];
+      if(val) drawCell(x,y,val);
+      else {
+        ctx.strokeStyle = 'rgba(255,255,255,0.02)';
+        ctx.strokeRect(x*BLOCK,y*BLOCK,BLOCK,BLOCK);
+      }
+    }
+  }
+
+  // draw player
+  if(player.matrix) mergeDraw(player.matrix, player.pos);
+
+  // --- GAME OVER OVERLAY ---
+  if(gameOver){
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle = '#ff4d4d';
+    ctx.font = 'bold 32px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('OUT OF BOUND', canvas.width/2, canvas.height/2);
+
+    ctx.fillStyle = '#dfe9ff';
+    ctx.font = '14px Arial';
+    ctx.fillText('Press R to Restart', canvas.width/2, canvas.height/2 + 36);
+  }
 }
 
 function collide(arena, player){
@@ -286,13 +304,16 @@ document.addEventListener('keydown', event => {
 
 // Buttons
 document.getElementById('btnRestart').addEventListener('click', restart);
+document.getElementById('btnPause').addEventListener('click', togglePause);
 
 function togglePause(){
+  const btn = document.getElementById('btnPause');
   if(gameOver){
     restart();
     return;
   }
   paused = !paused;
+  btn.textContent = paused ? 'Resume (P)' : 'Pause (P)';
   if(!paused){ lastTime = performance.now(); requestAnimationFrame(update); }
 }
 
@@ -303,6 +324,7 @@ function restart(){
   gameOver = false; paused = false;
   playerReset();
   updateScore();
+  document.getElementById('btnPause').textContent = 'Pause (P)';
   lastTime = performance.now();
   requestAnimationFrame(update);
 }
@@ -310,6 +332,7 @@ function restart(){
 // Start
 playerReset();
 updateScore();
+document.getElementById('btnPause').textContent = 'Pause (P)';
 requestAnimationFrame(update);
 
 </script>
