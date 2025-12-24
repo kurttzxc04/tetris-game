@@ -1,0 +1,131 @@
+/* ================= THEME VARIABLES ================= */
+
+:root {
+  --bg-top:#081026;
+  --bg-bottom:#071428;
+  --panel:#0f1724;
+  --text:#e6eef8;
+  --muted:#9aa6bf;
+  --button:#1b2430;
+  --button-hover:#2a3a50;
+  --border:rgba(100,150,255,0.3);
+  --canvas:#0b1220;
+  --grid:rgba(255,255,255,0.05);
+}
+
+body.light {
+  --bg-top:#ffffff;
+  --bg-bottom:#eaeaea;
+  --panel:#ffffff;
+  --text:#1a1a1a;
+  --muted:#555;
+  --button:#e0e0e0;
+  --button-hover:#cfcfcf;
+  --border:#bbb;
+  --canvas:#fafafa;
+  --grid:rgba(0,0,0,0.12);
+}
+
+/* ================= BASE ================= */
+
+html,body{
+  margin:0;
+  height:100%;
+  font-family:Inter,Segoe UI,Arial;
+  background:linear-gradient(180deg,var(--bg-top),var(--bg-bottom));
+  color:var(--text);
+}
+
+.wrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100%;
+}
+
+.game{display:flex;gap:20px}
+
+canvas{
+  background:var(--canvas);
+  border-radius:8px;
+}
+
+/* ================= UI ================= */
+
+.ui{
+  width:220px;
+  padding:18px;
+  background:var(--panel);
+  border-radius:10px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.4);
+}
+
+.stat{
+  display:flex;
+  justify-content:space-between;
+  margin:6px 0;
+  color:var(--muted);
+}
+
+button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border-radius:8px;
+  border:none;
+  background:var(--button);
+  color:var(--text);
+  cursor:pointer;
+}
+
+button:hover{background:var(--button-hover)}
+
+/* ================= TOGGLE ================= */
+
+#themeToggle{
+  position:fixed;
+  top:12px;
+  right:12px;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:2px solid var(--border);
+  background:var(--button);
+  cursor:pointer;
+  font-size:22px;
+}
+
+/* ================= MENUS ================= */
+
+#difficultyMenu,
+.game-over-overlay{
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:rgba(0,0,0,0.75);
+}
+
+.difficulty-container,
+.game-over-content{
+  background:var(--panel);
+  padding:40px;
+  border-radius:16px;
+  text-align:center;
+}
+
+/* ================= PREVIEW ================= */
+
+.next-preview-panel{margin-top:10px}
+.next-preview canvas{width:96px;height:96px}
+
+/* ================= FOOTER ================= */
+
+footer{
+  position:fixed;
+  bottom:10px;
+  left:10px;
+  color:var(--muted);
+  font-size:12px;
+}
