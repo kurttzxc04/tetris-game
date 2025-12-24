@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tetris Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <button id="themeToggle" title="Toggle dark/light mode" class="theme-toggle">🌙</button>
+  
+  <div id="difficultyMenu" class="difficulty-menu">
+    <div class="difficulty-container">
+      <h2>Select Difficulty</h2>
+      <button class="difficulty-btn" onclick="startGame('easy')">Easy</button>
+      <button class="difficulty-btn" onclick="startGame('normal')">Normal</button>
+    </div>
+  </div>
+
+  <div class="game-over-overlay" id="gameOverOverlay">
+    <div class="game-over-content">
+      <h2>GAME OVER</h2>
+      <p id="gameOverScore">Score: 0</p>
+      <p id="gameOverLevel">Level: 1</p>
+      <p id="gameOverLines">Lines: 0</p>
+      <p id="gameOverHighScore">High Score: 0</p>
+      <button class="game-over-button" onclick="restart()">Play Again</button>
+    </div>
+  </div>
+
+  <div class="wrap" style="display:none;" id="gameContainer">
+    <div class="game">
+      <div style="position:relative;">
+        <canvas id="tetris" width="240" height="480"></canvas>
+        <div id="nextPreviewPanel" class="next-preview-panel" style="display:none;">
+          <div class="next-preview">
+            <h3>Next Piece</h3>
+            <canvas id="nextPreview" width="96" height="96" class="next-preview-canvas"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="ui">
+        <h1>TETRIS</h1>
+        <div class="stat"><span>Score</span><strong id="score">0</strong></div>
+        <div class="stat"><span>High Score</span><strong id="highScore">0</strong></div>
+        <div class="stat"><span>Level</span><strong id="level">1</strong></div>
+        <div class="stat"><span>Lines</span><strong id="lines">0</strong></div>
+        <div style="height:10px"></div>
+        <div class="small">Controls</div>
+        <div class="controls">
+          Left / Right: ← →<br>
+          Soft drop: ↓<br>
+          Hard drop: Space<br>
+          Rotate: Up or Q / E<br>
+          Pause: P — Restart: R
+        </div>
+        <button id="btnPause">Pause (P)</button>
+        <button id="btnRestart">Restart (R)</button>
+      </div>
+    </div>
+  </div>
+  
+  <footer>Tetris Game — Open source</footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

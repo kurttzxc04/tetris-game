@@ -1,131 +1,431 @@
 /* ================= THEME VARIABLES ================= */
 
 :root {
-  --bg-top:#081026;
-  --bg-bottom:#071428;
-  --panel:#0f1724;
-  --text:#e6eef8;
-  --muted:#9aa6bf;
-  --button:#1b2430;
-  --button-hover:#2a3a50;
-  --border:rgba(100,150,255,0.3);
-  --canvas:#0b1220;
-  --grid:rgba(255,255,255,0.05);
+  /* Dark Mode Colors (Default) */
+  --bg-top: #081026;
+  --bg-bottom: #071428;
+  --panel: #0f1724;
+  --text: #e6eef8;
+  --text-secondary: #f6fbff;
+  --text-accent: #9fb0d9;
+  --muted: #9aa6bf;
+  --button: #1b2430;
+  --button-hover: #2a3a50;
+  --border: rgba(100, 150, 255, 0.3);
+  --canvas: #0b1220;
+  --grid: rgba(255, 255, 255, 0.05);
+  --grid-dark: rgba(0, 0, 0, 0.2);
+  --shadow: rgba(2, 6, 23, 0.6);
+  --modal-bg: rgba(30, 50, 80, 0.95);
+  --modal-border: rgba(100, 150, 255, 0.4);
+  
+  /* Accent Colors (Theme-Independent) */
+  --accent-primary: #4D96FF;
+  --accent-success: #6BCB77;
+  --accent-error: #ff6b6b;
 }
 
 body.light {
-  --bg-top:#ffffff;
-  --bg-bottom:#eaeaea;
-  --panel:#ffffff;
-  --text:#1a1a1a;
-  --muted:#555;
-  --button:#e0e0e0;
-  --button-hover:#cfcfcf;
-  --border:#bbb;
-  --canvas:#fafafa;
-  --grid:rgba(0,0,0,0.12);
+  --bg-top: #ffffff;
+  --bg-bottom: #e8e8e8;
+  --panel: #ffffff;
+  --text: #1a1a1a;
+  --text-secondary: #333333;
+  --text-accent: #4a90e2;
+  --muted: #666666;
+  --button: #e8e8e8;
+  --button-hover: #d0d0d0;
+  --border: #cccccc;
+  --canvas: #fafafa;
+  --grid: rgba(0, 0, 0, 0.12);
+  --grid-dark: rgba(0, 0, 0, 0.25);
+  --shadow: rgba(0, 0, 0, 0.1);
+  --modal-bg: #ffffff;
+  --modal-border: #d0d0d0;
 }
 
-/* ================= BASE ================= */
+/* ================= BASE STYLES ================= */
 
-html,body{
-  margin:0;
-  height:100%;
-  font-family:Inter,Segoe UI,Arial;
-  background:linear-gradient(180deg,var(--bg-top),var(--bg-bottom));
-  color:var(--text);
+* {
+  box-sizing: border-box;
 }
 
-.wrap{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100%;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.game{display:flex;gap:20px}
-
-canvas{
-  background:var(--canvas);
-  border-radius:8px;
+.wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 24px;
+  padding: 24px;
+  box-sizing: border-box;
 }
 
-/* ================= UI ================= */
-
-.ui{
-  width:220px;
-  padding:18px;
-  background:var(--panel);
-  border-radius:10px;
-  box-shadow:0 8px 25px rgba(0,0,0,0.4);
+.game {
+  display: flex;
+  gap: 18px;
 }
 
-.stat{
-  display:flex;
-  justify-content:space-between;
-  margin:6px 0;
-  color:var(--muted);
+/* ================= CANVAS ================= */
+
+canvas {
+  background: var(--canvas);
+  image-rendering: pixelated;
+  border-radius: 8px;
+  box-shadow: 0 8px 30px var(--shadow);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  display: block;
 }
 
-button{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  border-radius:8px;
-  border:none;
-  background:var(--button);
-  color:var(--text);
-  cursor:pointer;
+/* ================= UI PANEL ================= */
+
+.ui {
+  width: 220px;
+  padding: 18px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  box-shadow: 0 6px 20px var(--shadow);
+  transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
 }
 
-button:hover{background:var(--button-hover)}
-
-/* ================= TOGGLE ================= */
-
-#themeToggle{
-  position:fixed;
-  top:12px;
-  right:12px;
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  border:2px solid var(--border);
-  background:var(--button);
-  cursor:pointer;
-  font-size:22px;
+body.light .ui {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.01));
 }
 
-/* ================= MENUS ================= */
-
-#difficultyMenu,
-.game-over-overlay{
-  position:fixed;
-  inset:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:rgba(0,0,0,0.75);
+.ui h1 {
+  font-size: 18px;
+  margin: 0 0 10px;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
 }
 
-.difficulty-container,
-.game-over-content{
-  background:var(--panel);
-  padding:40px;
-  border-radius:16px;
-  text-align:center;
+.stat {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  color: var(--muted);
+  transition: color 0.3s ease;
 }
 
-/* ================= PREVIEW ================= */
+.stat strong {
+  color: var(--text);
+  transition: color 0.3s ease;
+}
 
-.next-preview-panel{margin-top:10px}
-.next-preview canvas{width:96px;height:96px}
+.small {
+  font-size: 12px;
+  color: var(--text-accent);
+  transition: color 0.3s ease;
+}
+
+.controls {
+  font-size: 13px;
+  margin-top: 12px;
+  color: var(--muted);
+  transition: color 0.3s ease;
+  line-height: 1.6;
+}
+
+/* ================= BUTTONS ================= */
+
+button {
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 12px;
+  border-radius: 8px;
+  border: none;
+  background: var(--button);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+button:hover:not(:disabled) {
+  background: var(--button-hover);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+button:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+/* ================= THEME TOGGLE BUTTON ================= */
+
+#themeToggle {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid var(--accent-primary);
+  background: var(--button);
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+#themeToggle:hover {
+  box-shadow: 0 0 15px var(--accent-primary);
+  transform: scale(1.1);
+}
+
+#themeToggle:active {
+  transform: scale(0.98);
+}
+
+/* ================= DIFFICULTY MENU ================= */
+
+.difficulty-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: background 0.3s ease;
+}
+
+body.light .difficulty-menu {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.difficulty-container {
+  text-align: center;
+  background: var(--modal-bg);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--modal-border);
+  transition: all 0.3s ease;
+}
+
+.difficulty-container h2 {
+  font-size: 32px;
+  margin: 0 0 30px;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.difficulty-btn {
+  width: 180px;
+  padding: 16px 20px;
+  font-size: 18px;
+  margin: 10px auto;
+  border: 2px solid var(--accent-primary);
+  background: var(--button);
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.difficulty-btn:hover {
+  background: var(--button-hover);
+  box-shadow: 0 0 15px var(--accent-primary);
+}
+
+/* ================= GAME OVER OVERLAY ================= */
+
+.game-over-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(2px);
+  transition: background 0.3s ease;
+}
+
+body.light .game-over-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.game-over-overlay.active {
+  display: flex;
+}
+
+.game-over-content {
+  text-align: center;
+  background: var(--modal-bg);
+  padding: 60px 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+  border: 2px solid var(--modal-border);
+  animation: slideIn 0.4s ease-out;
+  transition: all 0.3s ease;
+}
+
+.game-over-content h2 {
+  font-size: 48px;
+  margin: 0 0 20px;
+  color: var(--accent-error);
+  font-weight: bold;
+}
+
+.game-over-content p {
+  font-size: 18px;
+  color: var(--text);
+  margin: 10px 0;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+
+.game-over-button {
+  padding: 16px 32px;
+  font-size: 18px;
+  margin: 20px auto;
+  border: 2px solid var(--accent-primary);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-success));
+  color: #fff;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  display: inline-block;
+  width: auto;
+}
+
+.game-over-button:hover {
+  box-shadow: 0 0 30px rgba(77, 150, 255, 0.8);
+  transform: scale(1.05);
+}
+
+.game-over-button:active {
+  transform: scale(0.98);
+}
+
+/* ================= NEXT PIECE PREVIEW ================= */
+
+.next-preview-panel {
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.next-preview {
+  padding: 12px;
+  background: var(--modal-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.next-preview h3 {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--text-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+.next-preview-canvas {
+  width: 100%;
+  height: 100px;
+  background: var(--canvas);
+  border-radius: 4px;
+  display: block;
+  transition: background 0.3s ease;
+  image-rendering: pixelated;
+}
+
+/* ================= UI STATE CHANGES ================= */
+
+.ui.game-over {
+  opacity: 0.45;
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+.ui.game-over button {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+#btnRestart {
+  pointer-events: auto;
+  z-index: 100;
+}
+
+#btnRestart.active {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-success));
+  color: #fff;
+  font-weight: bold;
+  animation: pulse 1.5s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(77, 150, 255, 0.6);
+}
+
+#btnRestart.active:hover {
+  box-shadow: 0 0 30px rgba(77, 150, 255, 1);
+  transform: scale(1.05);
+}
 
 /* ================= FOOTER ================= */
 
-footer{
-  position:fixed;
-  bottom:10px;
-  left:10px;
-  color:var(--muted);
-  font-size:12px;
+footer {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  color: var(--muted);
+  font-size: 12px;
+  transition: color 0.3s ease;
+}
+
+/* ================= ANIMATIONS ================= */
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 15px rgba(77, 150, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(77, 150, 255, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(77, 150, 255, 0.5);
+  }
 }
